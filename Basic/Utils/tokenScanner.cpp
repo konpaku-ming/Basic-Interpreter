@@ -213,7 +213,13 @@ TokenType TokenScanner::getTokenType(std::string token) const
     return SEPARATOR;
   if (ch == '"' || (ch == '\'' && token.length() > 1))
     return STRING;
-  if (isdigit(ch))
+  bool digit_flag = true;
+  for (int i = 0; i < token.length(); i++)
+  {
+    if (!isdigit(token[i]))
+      digit_flag = false;
+  }
+  if (digit_flag)
     return NUMBER;
   if (isWordCharacter(ch))
     return WORD;
