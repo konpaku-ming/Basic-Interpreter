@@ -208,7 +208,7 @@ TokenType TokenScanner::getTokenType(std::string token) const
 {
   if (token == "")
     return TokenType(EOF);
-  char ch = token[0];
+  char ch = token[token.length() - 1];
   if (isspace(ch))
     return SEPARATOR;
   if (ch == '"' || (ch == '\'' && token.length() > 1))

@@ -41,7 +41,7 @@ void LETStatement::execute(EvalState &state, Program &program)
   program.adjustGOTO(false);
   TokenScanner token_scanner;
   token_scanner.ignoreWhitespace();
-  token_scanner.scanNumbers();
+  // token_scanner.scanNumbers();
   token_scanner.setInput(line);
   token_scanner.nextToken();
   std::string var = token_scanner.nextToken();
@@ -96,6 +96,11 @@ void PRINTStatement::execute(EvalState &state, Program &program)
   token_scanner.setInput(line);
   token_scanner.nextToken();
   int value = GetValue(token_scanner, state);
+  if (value == -1919810)
+  {
+    program.end();
+    return;
+  }
   if (value != -114514)
   {
     std::cout << value << "\n";
@@ -112,6 +117,11 @@ void PRINTStatement::dir_execute(EvalState &state, Program &program)
   token_scanner.setInput(line);
   token_scanner.nextToken();
   int value = GetValue(token_scanner, state);
+  if (value == -1919810)
+  {
+    program.end();
+    return;
+  }
   if (value != -114514)
   {
     std::cout << value << "\n";
@@ -126,7 +136,7 @@ void INPUTStatement::execute(EvalState &state, Program &program)
   std::cout << " ? ";
   TokenScanner token_scanner;
   token_scanner.ignoreWhitespace();
-  token_scanner.scanNumbers();
+  // token_scanner.scanNumbers();
   token_scanner.setInput(line);
   token_scanner.nextToken();
   std::string var = token_scanner.nextToken();
@@ -224,9 +234,14 @@ void IFStatement::execute(EvalState &state, Program &program)
   std::string left_exp = line.substr(3, cmp - 3);
   TokenScanner left_scanner;
   left_scanner.ignoreWhitespace();
-  left_scanner.scanNumbers();
+  // left_scanner.scanNumbers();
   left_scanner.setInput(left_exp);
   int left_value = GetValue(left_scanner, state);
+  if (left_value == -1919810)
+  {
+    program.end();
+    return;
+  }
   int r_begin = cmp + 1;
   while (line[r_begin] == ' ')
   {
@@ -240,9 +255,14 @@ void IFStatement::execute(EvalState &state, Program &program)
   std::string right_exp = line.substr(r_begin, r_end - r_begin + 1);
   TokenScanner right_scanner;
   right_scanner.ignoreWhitespace();
-  right_scanner.scanNumbers();
+  // right_scanner.scanNumbers();
   right_scanner.setInput(right_exp);
   int right_value = GetValue(right_scanner, state);
+  if (right_value == -1919810)
+  {
+    program.end();
+    return;
+  }
   if (check(op, left_value, right_value))
   {
     std::string then_exp = line.substr(r_end + 1);
@@ -318,6 +338,10 @@ int GetValue(TokenScanner &token_scanner, EvalState &state)
   {
     std::cout << ex.getMessage() << std::endl;
     delete exp;
+    if (ex.getMessage() == "DIVIDE BY ZERO")
+    {
+      return -1919810;
+    }
     return -114514;
   }
 }
